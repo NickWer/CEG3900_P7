@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.ceg3900.nick.passcheck.MainActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:text="Enter your desired password and press check:"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/lblEnterPw" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:id="@+id/txtPassword" />
+
+        <Button
+            android:text="Check Password Strength"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnCalculate" />
+
+        <Button
+            android:text="Attempt remote cracking"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnCrack" />
+        <Button
+            android:text="Generate Passphrase"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnGenerate" />
+
+        <TextView
+            android:text="Password Strength Rating:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lblPWStrDoNotUse" />
+
+        <TextView
+            android:text="Uncalculated"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/lblStrength" />
+    </LinearLayout>
+</RelativeLayout>

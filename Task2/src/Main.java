@@ -31,33 +31,40 @@ public class Main {
      * @param path - Path to the directory
      */
     private Main(String path) {
-        File folder = new File(path);
-        //noinspection ConstantConditions
-        Arrays.stream(folder.listFiles())
-                .filter(File::isFile)
-                .collect( //map files to Pairs<CountryCode, List<CourseDataFile>>
-                        Collectors.groupingBy(this::getCountry)
-                )
-                .entrySet().stream().map(CountryFilePair -> {
-                    KVP<String, Double> result = new KVP<>();
-                    result.key = CountryFilePair.getKey();
+        //clear runtime folder
+        try {
+            Runtime.getRuntime().exec("rm -rf runtime");
+            String command = "git clone " + path + " ./runtime/";
+            Process p = Runtime.getRuntime().exec(command);
+            File folder;
+            folder = new File("runtime");
+            //noinspection ConstantConditions
+            Arrays.stream(folder.listFiles())
+                    .filter(File::isFile)
+                    .collect( //map files to Pairs<CountryCode, List<CourseDataFile>>
+                            Collectors.groupingBy(this::getCountry)
+                    )
+                    .entrySet().stream().parallel().map(CountryFilePair -> {
+                KVP<String, Double> result = new KVP<>();
+                result.key = CountryFilePair.getKey();
 
-                    //Flat map the list of files into a list of lines
-                    result.value = CountryFilePair.getValue().stream().flatMap(file -> {
-                        try {
-                            return Files.lines(file.toPath());
-                        } catch (IOException e) {
-                            return (new ArrayList<String>()).stream();
-                        }
-                    }).mapToDouble(line -> { //map each line to a double
-                        return Float.parseFloat(line.split("\\s+")[1]);
-                    })
-                            .average().orElse(0D);//average all the grades in all the courses for this country
+                //Flat map the list of files into a list of lines
+                result.value = CountryFilePair.getValue().stream().flatMap(file -> {
+                    try {
+                        return Files.lines(file.toPath());
+                    } catch (IOException e) {
+                        return (new ArrayList<String>()).stream();
+                    }
+                }).mapToDouble(line -> { //map each line to a double
+                    return Float.parseFloat(line.split("\\s+")[1]);
+                })
+                        .average().orElse(0D);//average all the grades in all the courses for this country
 
-                    return result;
-                }).forEach(pair -> {
-            System.out.println(pair.key + ": " + pair.value.toString());
-        });
+                return result;
+            }).forEach(pair -> System.out.println(pair.key + ": " + pair.value.toString()));
+        } catch (Exception e) { //lol
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
